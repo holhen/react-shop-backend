@@ -6,7 +6,7 @@ export const getProductsList = {
     {
       http: {
         method: "get",
-        path: "getProductsList",
+        path: "products",
       },
     },
   ],
@@ -21,7 +21,22 @@ export const getProductById = {
     {
       http: {
         method: "get",
-        path: "getProductById/{productId}",
+        path: "products/{productId}",
+      },
+    },
+  ],
+  url: {
+    cors: true,
+  },
+};
+
+export const createProduct = {
+  handler: `${handlerPath(__dirname)}/create-product.createProduct`,
+  events: [
+    {
+      http: {
+        method: "post",
+        path: "products",
       },
     },
   ],

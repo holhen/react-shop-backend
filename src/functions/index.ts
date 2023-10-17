@@ -1,1 +1,5 @@
-export { getProductsList, getProductById } from "./product-service";
+export {
+  getProductsList,
+  getProductById,
+  createProduct,
+} from "./product-service";

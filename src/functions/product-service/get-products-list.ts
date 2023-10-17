@@ -1,7 +1,7 @@
 import type { ValidatedEventAPIGatewayProxyEvent } from "@libs/api-gateway";
 import { formatJSONResponse } from "@libs/api-gateway";
 import { DynamoDBClient, ScanCommand } from "@aws-sdk/client-dynamodb";
-import { Product } from "./models/product";
+import schema from "./schema";
 
 const client = new DynamoDBClient({
   region: "eu-north-1",
@@ -16,7 +16,7 @@ const getStocks = new ScanCommand({
 });
 
 export const getProductsList: ValidatedEventAPIGatewayProxyEvent<
-  any
+  typeof schema
 > = async () => {
   let response = await client.send(getProducts);
   const products = response.Items;

@@ -1,6 +1,10 @@
 import type { AWS } from "@serverless/typescript";
 
-import { getProductsList, getProductById } from "@functions/product-service";
+import {
+  getProductsList,
+  getProductById,
+  createProduct,
+} from "@functions/product-service";
 
 const serverlessConfiguration: AWS = {
   service: "shop-backend",
@@ -20,7 +24,7 @@ const serverlessConfiguration: AWS = {
     region: "eu-central-1",
   },
   // import the function via paths
-  functions: { getProductsList, getProductById },
+  functions: { getProductsList, getProductById, createProduct },
   resources: {
     Resources: {
       productsTable: {
@@ -36,14 +40,6 @@ const serverlessConfiguration: AWS = {
               AttributeName: "title",
               AttributeType: "S",
             },
-            {
-              AttributeName: "price",
-              AttributeType: "N",
-            },
-            {
-              AttributeName: "description",
-              AttributeType: "S",
-            },
           ],
           KeySchema: [
             {
@@ -52,7 +48,37 @@ const serverlessConfiguration: AWS = {
             },
             {
               AttributeName: "title",
+              KeyType: "RANGE",
+            },
+          ],
+          ProvisionedThroughput: {
+            ReadCapacityUnits: 1,
+            WriteCapacityUnits: 1,
+          },
+        },
+      },
+      stocksTable: {
+        Type: "AWS::DynamoDB::Table",
+        Properties: {
+          TableName: "stocks",
+          AttributeDefinitions: [
+            {
+              AttributeName: "product_id",
+              AttributeType: "S",
+            },
+            {
+              AttributeName: "count",
+              AttributeType: "N",
+            },
+          ],
+          KeySchema: [
+            {
+              AttributeName: "product_id",
               KeyType: "HASH",
+            },
+            {
+              AttributeName: "count",
+              KeyType: "RANGE",
             },
           ],
           ProvisionedThroughput: {
