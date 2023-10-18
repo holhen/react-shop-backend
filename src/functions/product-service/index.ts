@@ -7,12 +7,10 @@ export const getProductsList = {
       http: {
         method: "get",
         path: "products",
+        cors: true,
       },
     },
   ],
-  url: {
-    cors: true,
-  },
 };
 
 export const getProductById = {
@@ -22,12 +20,10 @@ export const getProductById = {
       http: {
         method: "get",
         path: "products/{productId}",
+        cors: true,
       },
     },
   ],
-  url: {
-    cors: true,
-  },
 };
 
 export const createProduct = {
@@ -37,10 +33,8 @@ export const createProduct = {
       http: {
         method: "post",
         path: "products",
+        cors: true,
       },
     },
   ],
-  url: {
-    cors: true,
-  },
 };

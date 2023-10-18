@@ -3,4 +3,5 @@ export interface Product {
   description: string;
   title: string;
   price: number;
+  count: number;
 }

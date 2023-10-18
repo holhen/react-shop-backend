@@ -5,7 +5,7 @@ import {
 } from "../../libs/api-gateway";
 import { Product } from "./models/product";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
-import schema from "./schema";
+import { v4 as uuid } from "uuid";
 
 const client = new DynamoDBClient({
   region: "eu-north-1",
@@ -16,24 +16,35 @@ const docClient = DynamoDBDocumentClient.from(client);
 const putProductCommand = (product: Product) =>
   new PutCommand({
     TableName: "products",
-    Item: product,
+    Item: {
+      id: product.id,
+      description: product.description,
+      title: product.title,
+      price: product.price,
+    },
   });
 
-const putStocksCommand = (productId: string) =>
+const putStocksCommand = (product: Product) =>
   new PutCommand({
     TableName: "stocks",
     Item: {
-      product_id: productId,
-      count: 1,
+      product_id: product.id,
+      count: product.count,
     },
   });
 
 export const createProduct: ValidatedEventAPIGatewayProxyEvent<
-  typeof schema
+  unknown
 > = async (event) => {
-  const product: Product = event.body.product as Product;
-  console.log(product);
+  const body = JSON.parse(event.body as string);
+  const product: Product = {
+    id: body.id ?? uuid(),
+    description: body.description,
+    title: body.title,
+    price: body.price,
+    count: body.count,
+  };
   await docClient.send(putProductCommand(product));
-  const putStocksResponse = docClient.send(putStocksCommand(product.id));
+  const putStocksResponse = await docClient.send(putStocksCommand(product));
   return formatJSONResponse(putStocksResponse);
 };

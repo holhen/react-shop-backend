@@ -17,17 +17,34 @@ const getProductCommand = (productId: string) =>
     },
   });
 
+const getStockCommand = (productId: string) =>
+  new QueryCommand({
+    TableName: "stocks",
+    KeyConditionExpression: "product_id = :product_id",
+    ExpressionAttributeValues: {
+      ":product_id": { S: productId },
+    },
+  });
+
 export const getProductById: ValidatedEventAPIGatewayProxyEvent<
   typeof schema
 > = async (event) => {
-  const command = getProductCommand(event.pathParameters.productId);
-  const response = await client.send(command);
+  const getProduct = getProductCommand(event.pathParameters.productId);
+  let response = await client.send(getProduct);
   const productItem = response.Items[0];
+  const getStock = getStockCommand(event.pathParameters.productId);
+  response = await client.send(getStock);
+  const stocks = response.Items;
+  const stockItem = stocks.find(
+    (stock) => stock.product_id.S === productItem.id.S
+  );
+
   const product: Product = {
     id: productItem.id.S,
     title: productItem.title.S,
     description: productItem.description.S,
     price: parseInt(productItem.price.N),
+    count: parseInt(stockItem.count.N),
   };
 
   return formatJSONResponse(product);
