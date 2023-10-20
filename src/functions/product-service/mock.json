@@ -4,5 +4,11 @@
   },
   "pathParameters": {
     "productId": "7567ec4b-b10c-48c5-9345-fc73c48a80aa"
+  },
+  "body": {
+    "count": 5,
+    "description": "Something shiny new",
+    "price": 20,
+    "title": "A new product"
   }
 }

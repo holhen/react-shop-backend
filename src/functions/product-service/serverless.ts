@@ -1,13 +1,9 @@
 import type { AWS } from "@serverless/typescript";
 
-import {
-  getProductsList,
-  getProductById,
-  createProduct,
-} from "@functions/product-service";
+import { getProductsList, getProductById, createProduct } from "./index";
 
 const serverlessConfiguration: AWS = {
-  service: "shop-backend",
+  service: "products-service",
   frameworkVersion: "3",
   plugins: ["serverless-esbuild"],
   provider: {
@@ -87,19 +83,6 @@ const serverlessConfiguration: AWS = {
           },
         },
       },
-    },
-  },
-  package: { individually: true },
-  custom: {
-    esbuild: {
-      bundle: true,
-      minify: false,
-      sourcemap: true,
-      exclude: ["aws-sdk"],
-      target: "node14",
-      define: { "require.resolve": undefined },
-      platform: "node",
-      concurrency: 10,
     },
   },
 };

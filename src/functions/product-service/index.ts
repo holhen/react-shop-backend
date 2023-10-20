@@ -1,31 +1,38 @@
-import { handlerPath } from "@libs/handler-resolver";
-
 export const getProductsList = {
-  handler: `${handlerPath(__dirname)}/get-products-list.getProductsList`,
+  handler: "./get-products-list.getProductsList",
   events: [
     {
       http: {
         method: "get",
-        path: "getProductsList",
+        path: "products",
+        cors: true,
       },
     },
   ],
-  url: {
-    cors: true,
-  },
 };
 
 export const getProductById = {
-  handler: `${handlerPath(__dirname)}/get-product-by-id.getProductById`,
+  handler: "./get-product-by-id.getProductById",
   events: [
     {
       http: {
         method: "get",
-        path: "getProductById/{productId}",
+        path: "products/{productId}",
+        cors: true,
       },
     },
   ],
-  url: {
-    cors: true,
-  },
+};
+
+export const createProduct = {
+  handler: "./create-product.createProduct",
+  events: [
+    {
+      http: {
+        method: "post",
+        path: "products",
+        cors: true,
+      },
+    },
+  ],
 };
