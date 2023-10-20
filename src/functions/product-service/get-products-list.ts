@@ -1,7 +1,8 @@
-import type { ValidatedEventAPIGatewayProxyEvent } from "@libs/api-gateway";
-import { formatJSONResponse } from "@libs/api-gateway";
+import {
+  formatJSONResponse,
+  ValidatedEventAPIGatewayProxyEvent,
+} from "../../libs/api-gateway";
 import { DynamoDBClient, ScanCommand } from "@aws-sdk/client-dynamodb";
-import schema from "./schema";
 
 const client = new DynamoDBClient({
   region: "eu-north-1",
@@ -15,9 +16,7 @@ const getStocks = new ScanCommand({
   TableName: "stocks",
 });
 
-export const getProductsList: ValidatedEventAPIGatewayProxyEvent<
-  typeof schema
-> = async () => {
+export const getProductsList: ValidatedEventAPIGatewayProxyEvent = async () => {
   let response = await client.send(getProducts);
   const products = response.Items;
 
@@ -26,13 +25,14 @@ export const getProductsList: ValidatedEventAPIGatewayProxyEvent<
 
   const joined = products.map((product) => {
     const stock = stocks.find((stock) => stock.product_id.S === product.id.S);
+    console.log(stock);
 
     return {
       id: product.id.S,
-      description: product.description.S,
+      description: product.description?.S ?? "",
       title: product.title.S,
-      price: product.price.N,
-      count: stock.count.N,
+      price: product.price?.N ?? 0,
+      count: stock?.count?.N ?? 0,
     };
   });
   return formatJSONResponse(joined);

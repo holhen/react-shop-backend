@@ -1,7 +1,5 @@
-import { handlerPath } from "@libs/handler-resolver";
-
 export const getProductsList = {
-  handler: `${handlerPath(__dirname)}/get-products-list.getProductsList`,
+  handler: "./get-products-list.getProductsList",
   events: [
     {
       http: {
@@ -14,7 +12,7 @@ export const getProductsList = {
 };
 
 export const getProductById = {
-  handler: `${handlerPath(__dirname)}/get-product-by-id.getProductById`,
+  handler: "./get-product-by-id.getProductById",
   events: [
     {
       http: {
@@ -27,7 +25,7 @@ export const getProductById = {
 };
 
 export const createProduct = {
-  handler: `${handlerPath(__dirname)}/create-product.createProduct`,
+  handler: "./create-product.createProduct",
   events: [
     {
       http: {

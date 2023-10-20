@@ -33,16 +33,16 @@ const putStocksCommand = (product: Product) =>
     },
   });
 
-export const createProduct: ValidatedEventAPIGatewayProxyEvent<
-  unknown
-> = async (event) => {
+export const createProduct: ValidatedEventAPIGatewayProxyEvent = async (
+  event
+) => {
   const body = JSON.parse(event.body as string);
   const product: Product = {
     id: body.id ?? uuid(),
     description: body.description,
     title: body.title,
-    price: body.price,
-    count: body.count,
+    price: body.price ?? 0,
+    count: body.count ?? 0,
   };
   await docClient.send(putProductCommand(product));
   const putStocksResponse = await docClient.send(putStocksCommand(product));

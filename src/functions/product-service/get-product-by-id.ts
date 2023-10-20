@@ -1,8 +1,9 @@
-import type { ValidatedEventAPIGatewayProxyEvent } from "@libs/api-gateway";
-import { formatJSONResponse } from "@libs/api-gateway";
+import {
+  formatJSONResponse,
+  ValidatedEventAPIGatewayProxyEvent,
+} from "../../libs/api-gateway";
 import { DynamoDBClient, QueryCommand } from "@aws-sdk/client-dynamodb";
 import { Product } from "./models/product";
-import schema from "./schema";
 
 const client = new DynamoDBClient({
   region: "eu-north-1",
@@ -26,9 +27,9 @@ const getStockCommand = (productId: string) =>
     },
   });
 
-export const getProductById: ValidatedEventAPIGatewayProxyEvent<
-  typeof schema
-> = async (event) => {
+export const getProductById: ValidatedEventAPIGatewayProxyEvent = async (
+  event
+) => {
   const getProduct = getProductCommand(event.pathParameters.productId);
   let response = await client.send(getProduct);
   const productItem = response.Items[0];
