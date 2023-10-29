@@ -5,9 +5,7 @@ import {
 import { DynamoDBClient, QueryCommand } from "@aws-sdk/client-dynamodb";
 import { Product } from "./models/product";
 
-const client = new DynamoDBClient({
-  region: "eu-north-1",
-});
+const client = new DynamoDBClient({});
 
 const getProductCommand = (productId: string) =>
   new QueryCommand({

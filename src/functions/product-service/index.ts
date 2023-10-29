@@ -36,3 +36,18 @@ export const createProduct = {
     },
   ],
 };
+
+export const catalogBatchProcess = {
+  handler: "./catalog-batch-process.catalogBatchProcess",
+  events: [
+    {
+      sqs: {
+        arn: {
+          "Fn::GetAtt": ["catalogItemsQueue", "Arn"],
+        },
+        batchSize: 5,
+        maximumBatchingWindow: 10,
+      },
+    },
+  ],
+};

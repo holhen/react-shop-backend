@@ -27,6 +27,11 @@ const serverlessConfiguration: AWS = {
         Action: "s3:*",
         Resource: "arn:aws:s3:::product-store-csv/*",
       },
+      {
+        Effect: "Allow",
+        Action: "sqs:SendMessage",
+        Resource: "arn:aws:sqs:eu-central-1:744566837372:catalogItemsQueue",
+      },
     ],
   },
   // import the function via paths
