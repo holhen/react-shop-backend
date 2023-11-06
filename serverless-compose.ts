@@ -6,6 +6,9 @@ const serverlessConfiguration = {
     import: {
       path: "./src/functions/import-service",
     },
+    authorization: {
+      path: "./src/functions/authorization-service",
+    },
   },
 };
 

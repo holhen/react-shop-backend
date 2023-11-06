@@ -44,6 +44,14 @@ const serverlessConfiguration: AWS = {
             method: "get",
             path: "import",
             cors: true,
+            authorizer: {
+              arn: "arn:aws:lambda:eu-central-1:744566837372:function:authorization-service-dev-basicAuthorizer",
+              resultTtlInSeconds: 0,
+              identitySource: "method.request.header.Authorization",
+              identityValidationExpression: ".*",
+              managedExternally: false,
+              type: "request",
+            },
             request: {
               parameters: {
                 querystrings: {
