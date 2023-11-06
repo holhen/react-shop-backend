@@ -4,11 +4,16 @@ import {
   GetObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
+import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs";
 import csvParser from "csv-parser";
 
-const client = new S3Client({
+const s3Client = new S3Client({
   region: "eu-central-1",
 });
+
+const sqsClient = new SQSClient({});
+const sqsURL =
+  "https://sqs.eu-central-1.amazonaws.com/744566837372/catalogItemsQueue";
 
 export const importFileParser = async (event) => {
   const bucket = "product-store-csv";
@@ -18,10 +23,16 @@ export const importFileParser = async (event) => {
       Key: record.s3.object.key,
     });
 
-    const response = await client.send(getCommand);
+    const sendMessageCommand = (message: string) =>
+      new SendMessageCommand({
+        QueueUrl: sqsURL,
+        MessageBody: message,
+      });
+
+    const response = await s3Client.send(getCommand);
     const body = response.Body;
     body.pipe(csvParser()).on("data", (data) => {
-      console.log(data);
+      sqsClient.send(sendMessageCommand(JSON.stringify(data)));
     });
 
     const copyCommand = new CopyObjectCommand({
@@ -30,13 +41,13 @@ export const importFileParser = async (event) => {
       CopySource: `${bucket}/${record.s3.object.key}`,
     });
 
-    await client.send(copyCommand);
+    await s3Client.send(copyCommand);
 
     const deleteCommand = new DeleteObjectCommand({
       Bucket: bucket,
       Key: record.s3.object.key,
     });
 
-    await client.send(deleteCommand);
+    await s3Client.send(deleteCommand);
   }
 };

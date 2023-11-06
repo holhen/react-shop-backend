@@ -7,9 +7,7 @@ import { Product } from "./models/product";
 import { DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { v4 as uuid } from "uuid";
 
-const client = new DynamoDBClient({
-  region: "eu-north-1",
-});
+const client = new DynamoDBClient({});
 
 const docClient = DynamoDBDocumentClient.from(client);
 

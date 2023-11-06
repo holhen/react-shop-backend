@@ -4,9 +4,7 @@ import {
 } from "../../libs/api-gateway";
 import { DynamoDBClient, ScanCommand } from "@aws-sdk/client-dynamodb";
 
-const client = new DynamoDBClient({
-  region: "eu-north-1",
-});
+const client = new DynamoDBClient({});
 
 const getProducts = new ScanCommand({
   TableName: "products",
@@ -25,7 +23,6 @@ export const getProductsList: ValidatedEventAPIGatewayProxyEvent = async () => {
 
   const joined = products.map((product) => {
     const stock = stocks.find((stock) => stock.product_id.S === product.id.S);
-    console.log(stock);
 
     return {
       id: product.id.S,
