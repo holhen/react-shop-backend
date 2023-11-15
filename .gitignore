@@ -8,3 +8,6 @@ lib
 
 # esbuild directories
 .esbuild
+
+# Environment variables 
+.env
